@@ -1,0 +1,468 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Binary in JavaScript</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/dot.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            # Binary in JavaScript
+
+            #### [dotJS](https://www.dotjs.io)
+            [@gnclmorais](https://twitter.com/gnclmorais)
+          </script>
+        </section>
+
+        <!-- Real life examples -->
+        <section>
+          <section data-background-image="img/but_why.gif">
+            <script type="text/template">
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+## “Binary in JavaScript”
+https://danthedev.com/2015/07/25/binary-in-javascript
+<br>
+by [Dan Prince (@_danprince)](https://twitter.com/_danprince)
+
+| Before | After |
+|:-:|:-:|
+|![Before](img/dan_prince_before.png)|![After](img/dan_prince_after.png)|
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+// Before:
+var tiles = { WATER: 0, EARTH: 1, SAND: 2, ROCK: 3 };
+var tile = {
+  type: tiles.WATER,
+  height: 0.54,
+  vegetation: false
+};
+// ~479 bits each pixel (350 + 64 + 64 + 1)
+  </code>
+</pre>
+<pre>
+  <code class="javascript fragment">
+// After:
+var tile = 2145;
+// 00000100 00110000 1
+// |        |        > vegetation
+// |        > height
+// > type
+// 64 bits at max
+  </code>
+</pre>
+            </script>
+          </section>
+        </section>
+
+        <!-- Technical details -->
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+# First things first,
+## a few technical details
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+## 1. Numbers in JavaScript are stored using 64 bits
+(Basically, numbers in JS are all floating point)
+<pre>
+  <code>
+				   sign | exponent | fraction
+				(1 bit) | (11 bit) | (52 bit)
+				     63 | 62 -- 52 | 51 --- 0
+  </code>
+</pre>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+## 2. Numbers with more than 32 bits get truncated
+<pre>
+  <code>
+	                                     // 15872588537857
+	  Before: 11100110111110100000000000000110000000000001
+	  After:              10100000000000000110000000000001
+	                                     //     2684379137
+  </code>
+</pre>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+## 3. Binary operations are fine for integers
+(Some even “work” on floating point numbers)
+### But not so much for other types 👎
+            </script>
+          </section>
+        </section>
+
+        <!-- Operands -->
+        <section data-markdown data-background-image="img/Dragon_Balls_operands.jpg">
+          <script type="text/template">
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+  # &
+  #### Bitwise `AND`
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+|a|b|a&b|
+|:-:|:-:|:-:|
+|0|0|0|
+|0|1|0|
+|1|0|0|
+|1|1|1|
+
+(If there’s a __0__, result will be __0__)
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+  console.log(3.14 & 3.14); // 3
+
+  //   0011
+  //   0011
+  // & ----
+  //   0011
+
+  // Math.trunc in ES6
+  function truncateInt(a) {
+    return a & a;
+  }
+  </code>
+</pre>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+  # |
+  #### Bitwise `OR`
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+|a|b|a/b|
+|:-:|:-:|:-:|
+|0|0|0|
+|0|1|1|
+|1|0|1|
+|1|1|1|
+
+(If there’s a __1__, result will be __1__)
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+	console.log(3.14 | 0); // 3
+
+	//   0011
+	//   0000
+	// | ----
+	//   0011
+
+	// Math.trunc in ES6
+	function truncateInt(a) {
+	  return a | 0;
+	}
+  </code>
+  <code class="javascript fragment">
+	// What about negative numbers?
+	 3.14 | 0 // 3
+	-3.14 | 0 // 3
+
+	// ≠ Math.floor()
+	// Same thing as & operator
+  </code>
+</pre>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+  # ~
+  #### Bitwise `NOT`
+  <p class="fragment">(or tilde)</p>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+	var a = 15;
+	console.log(a.toString(2)); // (0) 1111
+
+	var b = ~a; // -16
+	console.log(b.toString(2)); // (1) 0000
+  </code>
+</pre>
+<pre>
+  <code class="javascript fragment">
+	var a = 3.14;
+	console.log(~~a);  //  3
+	console.log(~~-a); // -3
+  </code>
+</pre>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+  # ^
+  #### Bitwise `XOR`
+<p class="fragment">(or _little hat_)</p>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+|a|b|a^b|
+|:-:|:-:|:-:|
+|0|0|0|
+|0|1|1|
+|1|0|1|
+|1|1|0|
+
+(If bits are different, the result is __1__)
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+	var a = 1, b = 2;
+
+	a ^= b; b ^= a; a ^= b; // wat?
+  </code>
+</pre>
+<p class="fragment">
+  Value swap without a third variable:
+</p>
+<pre class="fragment">
+  <code class="javascript">
+	var a = 1;  // 0001
+	var b = 2;  // 0010
+
+	a ^= b;  // 0001 ^ 0010 = 0011
+	b ^= a;  // 0010 ^ 0011 = 0001
+	a ^= b;  // 0011 ^ 0001 = 0010
+
+	console.log(a); // 2 (0010)
+	console.log(b); // 1 (0001)
+  </code>
+</pre>
+            </script>
+          </section>
+        <section data-background-image="img/finn_mindblown.gif"></section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+  # <<
+  #### Left shift
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+	9      : 0000 0000 1001
+	9 << 2 : 0000 0010 0100  // 36
+	                     ^^ new
+  </code>
+</pre>
+<pre>
+  <code class="javascript fragment">
+	// a << 1 == a * 2
+	function double(a) {
+	  return a << 1;
+	}
+
+	// 1 << n == Math.pow(2, n)
+	function pow2(n) {
+	  return 1 << n;
+	}
+  </code>
+</pre>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+  # >>
+  #### (Sign-propagating) right shift
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+	9      : 0000 0000 1001
+	9 >> 2 : 0000 0000 0010  // 2
+	         ^^ new
+  </code>
+</pre>
+<pre>
+  <code class="javascript fragment">
+	-9      : 1111 1111 0111
+	-9 >> 2 : 1111 1111 1101
+	          ^^ new
+	// Sign is preserved
+  </code>
+</pre>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+	// a >> 1 == a / 2 (integer)
+	function half(a) {
+	  return Math.floor(a >> 1);
+	}
+	half(3.14); // 1
+
+	// If number is negative:
+	half(-3.14); // -2, so… yeah… half-ish.
+  </code>
+</pre>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+  # >>>
+  #### (Zero-fill) right shift
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+<pre>
+  <code class="javascript">
+	 9       : 0000 0000 1001
+	 9 >>> 2 : 0000 0000 0010
+	           ^^ new
+
+	-9       : 1111 1111 0111
+	-9 >>> 2 : 0011 1111 1101
+	           ^^ new
+  </code>
+</pre>
+<pre>
+  <code class="javascript fragment">
+	var a = '15' >>> 0;
+	console.log(typeof a, a); // number 15
+  </code>
+</pre>
+            </script>
+          </section>
+        </section>
+
+        <!-- Conclusions -->
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+## Should you use this
+## on production?
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+## Probably not
+
+<ul class="fragment">
+	<li>
+		Obfuscated
+	</li>
+	<li class="fragment">
+		Limitations & gotchas
+	</li>
+	<li class="fragment">
+		Douglas Crockford [doesn’t like it](http://stackoverflow.com/a/1909320/590525) 💩
+	</li>
+</ul>
+            </script>
+          </section>
+          <section data-markdown>
+## How about side projects?
+Or high performance situations?
+          </section>
+          <section data-markdown>
+# ¯\\\_(ツ)_/¯
+## Why not?
+          </section>
+          <section data-markdown data-background-image="img/awesome.gif">
+          </section>
+        </section>
+
+        <!-- End -->
+        <section data-markdown>
+          <script type="text/template">
+<img data-src="img/fin.png" style="max-width: 33%;">
+<div style="font-family: serif; font-style: oblique; font-size: 2em;">Fin.</div>
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // Custom
+        transitionSpeed: 'fast',
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>

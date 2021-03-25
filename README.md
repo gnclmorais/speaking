@@ -3,6 +3,9 @@ Welcome! Here you’ll find slides and notes from my talks. Enjoy!
 
 ## Timeline
 
+### 2021-03-29, **EmberConf**, remote - _A Birds-Eye Vue of Ember_
+- [Slides](2021-03-29_EmberConf/2021_Birds-Eye_Vue_of_Ember.pdf)
+
 ### 2021-03-12, codebar Festival, remote - _A practical guide for conducting efficient code reviews_
 - [Slides](2021-03-12_codebar_Festival/a_practical_guide_for_conducting_efficient_code_reviews.pdf)
 

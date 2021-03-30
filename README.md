@@ -8,6 +8,7 @@ Welcome! Here you’ll find slides and notes from my talks. Enjoy!
 
 ### 2021-03-12, codebar Festival, remote - _A practical guide for conducting efficient code reviews_
 - [Slides](2021-03-12_codebar_Festival/a_practical_guide_for_conducting_efficient_code_reviews.pdf)
+- [Video](https://www.youtube.com/watch?v=torsRGH-Jj0)
 
 ### 2019-06-10, LRUG, London - _A practical guide for conducting efficient code reviews_
 - [Slides](2019-06-10_lrug/field_guide_for_conducting_efficient_code_reviews.pdf)

@@ -5,6 +5,7 @@ Welcome! Here you’ll find slides and notes from my talks. Enjoy!
 
 ### 2021-10-30 @ EmberFest (Rome, IT) - _Mock & Roll_
 - [Slides](2021-10-30_EmberFest/slides-mock_n_rock.html)
+- [Video](https://youtube.com/watch?v=tOSqtIPxAsA)
 
 ### 2021-03-29 @ EmberConf (remote) - _A Birds-Eye Vue of Ember_
 - [Slides](2021-03-29_EmberConf/2021_Birds-Eye_Vue_of_Ember.pdf)

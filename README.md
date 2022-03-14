@@ -3,6 +3,9 @@ Welcome! Here you’ll find slides and notes from my talks. Enjoy!
 
 ## Timeline
 
+### 2022-02-23 @ Ember Ignite (remote) - _Pair Programming_
+- [Video](https://youtube.com/watch?v=-hRCkQUs8PY)
+
 ### 2021-10-30 @ EmberFest (Rome, IT) - _Mock & Roll_
 - [Slides](2021-10-30_EmberFest/slides-mock_n_rock.html)
 - [Video](https://youtube.com/watch?v=tOSqtIPxAsA)

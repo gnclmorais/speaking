@@ -3,6 +3,9 @@ Welcome! Here you’ll find slides and notes from my talks. Enjoy!
 
 ## Timeline
 
+### 2022-10-23 @ EmberFest (Paris, FR) - _Move Fast and (Don’t) Break Things_
+- [Slides](2022-10-23_EmberFest/slides-move_fast_and_dont_break_things.pdf)
+
 ### 2022-02-23 @ Ember Ignite (remote) - _Pair Programming_
 - [Video](https://youtube.com/watch?v=-hRCkQUs8PY)
 
